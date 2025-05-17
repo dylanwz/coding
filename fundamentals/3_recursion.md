@@ -46,25 +46,26 @@ def backtrack(candidate):
 Backtracking, and recursion in general, lends itself to a stack structure because we want to access the last state.
 
 ```python
-stack = [(initial_path, initial_options)]
+def backtrack(path, options):    
+    stack = [(initial_path, initial_options)]
 
-while stack is not empty:
-    
-    # if something gets popped without anything having been pushed,
-    # it means it wasn't a solution
-    path, options = stack.pop()
+    while stack is not empty:
+        
+        # if something gets popped without anything having been pushed,
+        # it means it wasn't a solution
+        path, options = stack.pop()
 
-    # found a temporary solution, save
-    if base_case(path):
-        result.append(copy_of(path))
-        continue
+        # found a temporary solution, save
+        if base_case(path):
+            result.append(copy_of(path))
+            continue
 
-    for option in options:
-        if is_valid(option, path):
-            # choose
-            new_path = path + [option]           
-            # advance   
-            new_options = update(options, option)
-            # explore
-            stack.push((new_path, new_options))
+        for option in options:
+            if is_valid(option, path):
+                # choose
+                new_path = path + [option]           
+                # advance   
+                new_options = update(options, option)
+                # explore
+                stack.push((new_path, new_options))
 ```
