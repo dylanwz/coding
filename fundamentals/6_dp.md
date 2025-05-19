@@ -26,8 +26,6 @@ DP is about solving problems by breaking them <mark style="background-color:#E5C
 Climbing Stairs. Each time, you can climb 1 or 2 steps. How many distinct ways to reach step n?
 
 ```python
-Copy
-Edit
 def climbStairs(n):
     if n <= 2:  # base case
         return n
