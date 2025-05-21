@@ -1,5 +1,5 @@
 '''
-# TAG-BACKTRACKING
+# TAG-BT
 # N.B.: pop, base case, explore valid options (natural abandonment if no remaining valid)
 '''
 
