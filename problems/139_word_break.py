@@ -4,6 +4,9 @@
 - subproblem: can i solve a smaller version of this problem (like a trivial one)? is it any easier?
 - recurrence: how can i solve a larger version using only what i know about the smaller version?
 - base case: until i cannot use any smaller version
+
+subproblem: whether s up to index i can be broken
+recurrence: yes if some index j < i can be done AND j:i is in dict; no otherwise  
 '''
 
 from typing import List

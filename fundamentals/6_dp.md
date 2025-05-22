@@ -12,6 +12,10 @@ DP is about solving problems by breaking them <mark style="background-color:#E5C
 
 5. <b>Goal</b> – What state/result do I ultimately want?
 
+- subproblem: can i solve a smaller version of this problem (like a trivial one)? is it any easier?
+- recurrence: how can i solve a larger version using only what i know about the smaller version?
+- base case: until i cannot use any smaller version
+
 ### Common DP Patterns
 | Pattern           | Description                                | Example Problems         |
 | ----------------- | ------------------------------------------ | ------------------------ |
