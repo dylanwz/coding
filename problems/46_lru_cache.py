@@ -1,7 +1,10 @@
 '''
 # TAG-DLL
-# N.B. doubly-linked list + hash map (because we need values, not memory addresses)
-# allows O(1) re-arranging
+# N.B.: doubly-linked list + hash map (because we need values, not memory addresses)
+#       allows O(1) re-arranging
+
+implement add (dummy head -> new, new -> old dummy.next) and remove (fill in) so that updates is just removing then
+adding
 '''
 
 class Node:

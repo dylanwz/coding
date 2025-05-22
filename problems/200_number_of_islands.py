@@ -1,5 +1,5 @@
 '''
-# TAG-FLOOD
+# TAG-FLD
 # N.B.: use DFS/BFS but define the "neighbours" yourself, i.e. with cardinal directions
 '''
 
