@@ -78,7 +78,7 @@ def update(problem, quality):
     save(data)
     print(f"✅ Updated '{problem}' with quality={quality}. Next review: {item['next_review']}")
 
-def add(problem):
+def add(problem, quality=None):
     data = load()
     if problem in data:
         print("⚠️ Already exists.")
@@ -91,7 +91,10 @@ def add(problem):
         "ef": 2.5
     }
     save(data)
-    print(f"✅ Added '{problem}' to schedule.")
+    if quality:
+        update(problem, quality)
+    else:
+        print(f"✅ Added '{problem}' to schedule.")
 
 def remove(problem):
     data = load()
