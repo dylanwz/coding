@@ -5,7 +5,7 @@
 
 set -e
 
-PROBLEM_FILE="$1"
+FILENAME="$1"
 DIFFICULTY="${2:-3}"
 
 if [ -z "$PROBLEM_FILE" ]; then
@@ -18,9 +18,6 @@ if ! [[ "$DIFFICULTY" =~ ^[0-5]$ ]]; then
   exit 1
 fi
 
-# Get filename only (strip path)
-FILENAME=$(basename "$PROBLEM_FILE")
-
 # Commit message: "add 123_two_sum.py [difficulty: 4]"
 COMMIT_MSG="did $FILENAME [difficulty: $DIFFICULTY]"
 
@@ -30,7 +27,7 @@ git commit -m "$COMMIT_MSG"
 git push
 
 # Update revision schedule
-revision add "$FILENAME" 2>/dev/null || echo "⚠️ Already tracked in revision."
-revision update "$FILENAME" "$DIFFICULTY"
+revise add "$FILENAME" 2>/dev/null || echo "⚠️ Already tracked in revision."
+revise update "$FILENAME" "$DIFFICULTY"
 
 echo "✅ Done: committed and updated spaced repetition tracker"
