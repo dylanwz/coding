@@ -8,7 +8,7 @@ set -e
 FILENAME="$1"
 DIFFICULTY="${2:-3}"
 
-if [ -z "$PROBLEM_FILE" ]; then
+if [ -z "$FILENAME" ]; then
   echo "Please follow usage: $0 <problem_file> <difficulty (0-5)>"
   exit 1
 fi
