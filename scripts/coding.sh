@@ -26,8 +26,4 @@ git add .
 git commit -m "$COMMIT_MSG"
 git push
 
-# Update revision schedule
-revise add "$FILENAME" 2>/dev/null || echo "⚠️ Already tracked in revision."
-revise update "$FILENAME" "$DIFFICULTY"
-
 echo "✅ Done: committed and updated spaced repetition tracker"
