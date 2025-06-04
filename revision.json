@@ -1,16 +1,23 @@
 {
-  "88": {
-    "last_reviewed": "2025-06-03",
-    "next_review": "2025-06-04",
-    "interval": 1,
-    "repetition": 0,
-    "ef": 2.18
+  "26_remove_duplicates": {
+    "last_reviewed": "2025-06-04",
+    "next_review": "2025-06-10",
+    "interval": 6,
+    "repetition": 2,
+    "ef": 2.28
   },
-  "27": {
-    "last_reviewed": "2025-06-03",
-    "next_review": "2025-06-04",
-    "interval": 1,
-    "repetition": 0,
-    "ef": 1.96
+  "27_remove_element": {
+    "last_reviewed": "2025-06-04",
+    "next_review": "2025-06-10",
+    "interval": 6,
+    "repetition": 2,
+    "ef": 1.42
+  },
+  "88_merge_sorted_array": {
+    "last_reviewed": "2025-06-04",
+    "next_review": "2025-06-10",
+    "interval": 6,
+    "repetition": 2,
+    "ef": 1.3
   }
 }

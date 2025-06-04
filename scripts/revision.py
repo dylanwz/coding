@@ -37,21 +37,11 @@ def due():
         if TODAY >= next_review:
             print(f"{prob}: due today or earlier (next_review = {meta['next_review']})")
 
-def update(problem, quality):
-    data = load()
-    if problem not in data:
-        print(f"❌ Problem '{problem}' not found.")
-        return
-
+def superMemo(quality, repetition, interval, ef):
+    """
+    Applies the SM-2 algorithm and returns updated (interval, repetition, ef)
+    """
     quality = int(quality)
-    if not (0 <= quality <= 5):
-        print("❌ Quality must be between 0 and 5.")
-        return
-
-    item = data[problem]
-    repetition = item.get("repetition", 0)
-    interval = item.get("interval", 1)
-    ef = item.get("ef", 2.5)
 
     if quality >= 3:
         if repetition == 0:
@@ -69,14 +59,49 @@ def update(problem, quality):
     ef = ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
     ef = max(1.3, ef)
 
+    return interval, repetition, round(ef, 2)
+
+
+def update(problem_input, quality):
+    data = load()
+    quality = int(quality)
+
+    if not (0 <= quality <= 5):
+        print("❌ Quality must be between 0 and 5.")
+        return
+
+    # First try exact match
+    if problem_input in data:
+        problem_key = problem_input
+    else:
+        # Try to match by prefix
+        matches = [k for k in data.keys() if k.split("/")[-1].startswith(problem_input)]
+
+        if len(matches) == 0:
+            print(f"❌ No problem matching '{problem_input}' found.")
+            return
+        elif len(matches) > 1:
+            print(f"⚠️ Ambiguous problem code '{problem_input}'. Matches: {matches}")
+            return
+        else:
+            problem_key = matches[0]
+
+    item = data[problem_key]
+    repetition = item.get("repetition", 0)
+    interval = item.get("interval", 1)
+    ef = item.get("ef", 2.5)
+
+    interval, repetition, ef = superMemo(quality, repetition, interval, ef)
+
     item["last_reviewed"] = TODAY.strftime("%Y-%m-%d")
     item["next_review"] = (TODAY + timedelta(days=interval)).strftime("%Y-%m-%d")
     item["interval"] = interval
     item["repetition"] = repetition
-    item["ef"] = round(ef, 2)
+    item["ef"] = ef
 
     save(data)
-    print(f"✅ Updated '{problem}' with quality={quality}. Next review: {item['next_review']}")
+    print(f"✅ Updated '{problem_key}' with quality={quality}. Next review: {item['next_review']}")
+
 
 def add(problem, quality=None):
     data = load()
@@ -96,14 +121,28 @@ def add(problem, quality=None):
     else:
         print(f"✅ Added '{problem}' to schedule.")
 
-def remove(problem):
+def remove(problem_input):
     data = load()
-    if problem not in data:
-        print(f"❌ Problem '{problem}' not found.")
-        return
-    del data[problem]
+
+    # First try exact match
+    if problem_input in data:
+        problem_key = problem_input
+    else:
+        # Try to match by prefix
+        matches = [k for k in data.keys() if k.split("/")[-1].startswith(problem_input)]
+
+        if len(matches) == 0:
+            print(f"❌ No problem matching '{problem_input}' found.")
+            return
+        elif len(matches) > 1:
+            print(f"⚠️ Ambiguous problem code '{problem_input}'. Matches: {matches}")
+            return
+        else:
+            problem_key = matches[0]
+    
+    del data[problem_key]
     save(data)
-    print(f"🗑️ Removed '{problem}' from schedule.")
+    print(f"Removed '{problem_key}' from schedule.")
 
 def purge():
     confirm = input("⚠️ Are you sure you want to delete all tracked problems? (yes/no): ").strip().lower()
@@ -123,6 +162,17 @@ def list_all():
     for prob, meta in data.items():
         print(f"{prob:25} next: {meta['next_review']} | ef: {meta['ef']} | interval: {meta['interval']}d")
 
+def rename(old, new):
+    data = load()
+    if old not in data:
+        print(f"❌ Problem '{old}' not found.")
+        return
+    if new in data:
+        print(f"⚠️ Problem '{new}' already exists in tracker. Aborting to avoid overwrite.")
+        return
+    data[new] = data.pop(old)
+    save(data)
+
 def help():
     print("Usage:")
     print("  revise check                     # See what’s due today")
@@ -132,6 +182,7 @@ def help():
     print("  revise list                      # View all tracked problems")
     print("  revise remove <problem>          # Delete a problem")
     print("  revise purge                     # Delete all problems")
+    print("  revise rename <old> <new>        # Rename a problem")
 
 if __name__ == "__main__":
     args = sys.argv[1:]
@@ -143,13 +194,20 @@ if __name__ == "__main__":
         due()
     elif args[0] == "update" and len(args) == 3:
         update(args[1], args[2])
-    elif args[0] == "add" and len(args) == 2:
-        add(args[1])
+    elif args[0] == "add":
+        if len(args) == 2:
+            add(args[1])
+        elif len(args) == 3:
+            add(args[1], args[2])
+        else:
+            help()
     elif args[0] == "remove" and len(args) == 2:
         remove(args[1])
     elif args[0] == "purge":
         purge()
     elif args[0] == "list":
         list_all()
+    elif args[0] == "rename" and len(args) == 3:
+        rename(args[1], args[2])
     else:
         help()
